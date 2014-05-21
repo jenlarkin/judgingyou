@@ -1,0 +1,8 @@
+body            { font-family: sans-serif; background: #DBC2FF; }
+a, h1, h2       { color: #54254F; }
+h1, h2          { font-family: 'Georgia', serif; margin: 0; }
+h1              { border-bottom: 2px solid #9C4591; }
+h2              { font-size: 1.2em; }
+
+.page           { margin: 2em auto; border: 2px solid #9C4591;
+                  padding: 1em; background: #ffefff; }

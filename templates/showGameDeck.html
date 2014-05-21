@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>Game Deck:</h2>
+	<ul>
+	{% for deckType in gameDeck %}
+		<li>{{ deckType }}</li>
+			<ul>
+			{% for metadata in gameDeck[deckType] %}
+				{% if metadata != 'deck' %}
+				<li>{{ metadata }}: {{ gameDeck[deckType][metadata] }}</li>
+				{% endif %}
+			{% endfor %}
+			<li>DECK: 
+				<ul>
+				{% for cardCode in gameDeck[deckType].deck %}
+					<li>{{ cardCode }}</li>
+				{% endfor %}
+				</ul>
+			</li>
+		</ul>
+	{% endfor %}
+	</ul>
+{% endblock %}

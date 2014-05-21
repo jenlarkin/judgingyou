@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+<h2>Sample Prompt:</h2>
+	<strong>{{ prompt.cardText|safe }}</strong>
+<hr>
+<h2>Sample Hand:</h2>
+	<ul>
+	{% for card in hand %}
+		<li><strong>{{ card.cardID|safe }}:</strong>({{ card.watermark|safe }}) {{ card.cardText|safe }}</li>
+	{% endfor %}
+	</ul>
+{% endblock %}

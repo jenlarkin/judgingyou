@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block body %}
+	<ul>
+	{% for deck in decks %}
+		<li>
+			{{ deck }}
+			<ul>
+				<li>Name: {{ decks[deck].name|safe }}</li>
+				<li>Description: {{ decks[deck].description|safe }}</li>
+				<li>Watermark: {{ decks[deck].watermark }}</li>
+				<li>Is Active: {% if decks[deck].isActive %}True{% else %}False{% endif %}</li>
+				<li>Is Base Deck: {% if decks[deck].isBaseDeck %}True{% else %}False{% endif %}</li>
+				<li>Is Custom Deck: {{ decks[deck].isCustomDeck }}</li>
+				<li>Number of Prompts: {{ decks[deck].numPrompts|safe }}</li>
+				<li>PROMPTS: 
+					<ul>
+					{% for card in decks[deck].prompts %} 
+						<li><strong>{{ card }}: </strong>{{ decks[deck].prompts[card].cardText|safe }}
+							{% if decks[deck].prompts[card].drawBefore != 0 or decks[deck].prompts[card].numberToPlay > 1 %}
+							<ul>
+								{% if decks[deck].prompts[card].drawBefore != 0 %}<li>Draw {{ decks[deck].prompts[card].drawBefore }}</li>{% endif %}
+								{% if decks[deck].prompts[card].numberToPlay > 1 %}<li>Play {{ decks[deck].prompts[card].numberToPlay }}</li>{% endif %}
+							</ul>
+							{% endif %}
+						</li>
+					{% endfor %}
+					</ul>
+				</li>
+				<li>Number of Answers: {{ decks[deck].numAnswers|safe }}</li>
+				<li>ANSWERS: 
+					<ul>
+					{% for card in decks[deck].answers %} 
+						<li><strong>{{ card }}: </strong>{{ decks[deck].answers[card].cardText|safe }}</li>
+					{% endfor %}
+					</ul>
+				</li>
+			</ul>
+		</li>
+	{% endfor %}
+	</ul>
+{% endblock %}
