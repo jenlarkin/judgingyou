@@ -4,6 +4,7 @@ def getAvailableDecks(CSVPath):
 	""" creates decks dict from metadata in decks/decks.csv """
 	result = {}
 
+	# TODO: should be with open like the load prompts code, try consolidate with other functions
 	rawFile = open(CSVPath + 'decks.csv', 'rb')
 	fileContents = csv.DictReader(rawFile, delimiter=',')
 
@@ -49,17 +50,20 @@ def loadActiveDecks(decks, CSVPath):
 				loadDeckFromFile(decks[deck])
 			except:
 				decks[deck]['isActive'] = False
+			# TODO: add exception for if both decks are empty. empty prompts or answers is ok, but not both
 
 	return decks
 
 def setPrompts(prompts):
 	""" adds prompt cards from CSV to the deck """
 	# if database functions are added, need to split at line outside of function instead of looping on line
+	# TODO: consolidate with setAnswers, evaluate if setting up file metadata would allow decks to be consolidated too
 	result = {}
 	i = 0
 
 	for line in prompts:
 		result[i] = {}
+		# TODO: add in watermark and iscustom
 		result[i]['cardText'] = line['card_text']
 		result[i]['numberToPlay'] = int(line['number_to_play'])
 		result[i]['drawBefore'] = int(line['draw_before'])
@@ -75,12 +79,14 @@ def setAnswers(answers):
 
 	for line in answers:
 		result[i] = {}
+		# TODO: add in watermark and iscustom
 		result[i]['cardText'] = line['card_text']
 		i = i + 1
 	
 	return result
 
 def loadPrompts(csvFilePath):
+	# TODO: consolidate loadPrompts(), loadAnswers(), and move decks.csv load here
 	""" opens prompts csv file and returns prompts deck"""
 	with open(csvFilePath, 'rb') as fileContents:
 		results = csv.DictReader(fileContents, delimiter=',')
@@ -88,6 +94,7 @@ def loadPrompts(csvFilePath):
 	return results
 
 def loadAnswers(csvFilePath):
+	# TODO: smite. See load prompts.
 	""" opens answers csv file and returns answers deck"""
 	with open(csvFilePath, 'rb') as fileContents:
 		results = csv.DictReader(fileContents, delimiter=',')
@@ -96,7 +103,7 @@ def loadAnswers(csvFilePath):
 
 def loadDeckFromFile(deck):
 	""" sets up deck from file. Used to add decks, reload decks	"""
-
+	# TODO: could be a single function used twice. May not be worth refactoring
 	deck['prompts'] = {}
 	deck['prompts'] = loadPrompts(deck['promptsCSV'])	
 	deck['numPrompts'] = len(deck['prompts'])
@@ -111,10 +118,12 @@ def filterDecks(availableDecks,filterType,filterList):
 	result = {}
 
 	for deck in availableDecks:
+		# TODO: add code to validate filter criteria, deck not found
 		if filterType == 'active':
 			if availableDecks[deck]['isActive']:
 				result[deck] = availableDecks[deck]
 		elif filterType == 'included' and filterList != '':
+			# TODO: add exception if filterList is empty
 			if deck in filterList:
 				if availableDecks[deck]['isActive']:
 					result[deck] = availableDecks[deck]
