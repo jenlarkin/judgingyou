@@ -1,5 +1,5 @@
 import random
-from judgingyou import deck
+import judgingyou.deck
 
 randomizer = random.Random()
 

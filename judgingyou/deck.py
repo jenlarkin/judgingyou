@@ -54,6 +54,40 @@ def loadActiveDecks(decks, CSVPath):
 
 	return decks
 
+def loadDeckFromFile(deck):
+	""" sets up deck from file. Used to add decks, reload decks	"""
+	# TODO: could be a single function used twice. May not be worth refactoring
+	isMissingDecks = 0
+	try:
+		deck['prompts'] = {}
+		deck['prompts'] = loadDeckCards(deck['promptsCSV'],'prompts')	
+		deck['numPrompts'] = len(deck['prompts'])
+	except:
+		isMissingDecks = 1
+
+	try:
+		deck['answers'] = {}
+		deck['answers'] = loadDeckCards(deck['answersCSV'], 'answers')
+		deck['numAnswers'] = len(deck['answers'])
+	except:
+		isMissingDecks = isMissingDecks + 1
+
+	if isMissingDecks > 1:
+		raise Exception('Deck set as active has no cards.')
+
+	return deck
+
+def loadDeckCards(csvFilePath,deckType):
+	with open(csvFilePath, 'rb') as fileContents:
+		results = csv.DictReader(fileContents, delimiter=',')
+		if deckType == 'prompts':
+			results = setPrompts(results)
+		elif deckType == 'answers':
+			results = setAnswers(results)
+		else:
+			raise Exception('invalid deckType sent to loadDeckCards. Value was: ' + deckType)
+	return results
+
 def setPrompts(prompts):
 	""" adds prompt cards from CSV to the deck """
 	# if database functions are added, need to split at line outside of function instead of looping on line
@@ -83,36 +117,7 @@ def setAnswers(answers):
 		result[i]['cardText'] = line['card_text']
 		i = i + 1
 	
-	return result
-
-def loadPrompts(csvFilePath):
-	# TODO: consolidate loadPrompts(), loadAnswers(), and move decks.csv load here
-	""" opens prompts csv file and returns prompts deck"""
-	with open(csvFilePath, 'rb') as fileContents:
-		results = csv.DictReader(fileContents, delimiter=',')
-		results = setPrompts(results)
-	return results
-
-def loadAnswers(csvFilePath):
-	# TODO: smite. See load prompts.
-	""" opens answers csv file and returns answers deck"""
-	with open(csvFilePath, 'rb') as fileContents:
-		results = csv.DictReader(fileContents, delimiter=',')
-		results = setAnswers(results)
-	return results
-
-def loadDeckFromFile(deck):
-	""" sets up deck from file. Used to add decks, reload decks	"""
-	# TODO: could be a single function used twice. May not be worth refactoring
-	deck['prompts'] = {}
-	deck['prompts'] = loadPrompts(deck['promptsCSV'])	
-	deck['numPrompts'] = len(deck['prompts'])
-
-	deck['answers'] = {}
-	deck['answers'] = loadAnswers(deck['answersCSV'])
-	deck['numAnswers'] = len(deck['answers'])
-
-	return deck
+	return result	
 
 def filterDecks(availableDecks,filterType,filterList):
 	result = {}

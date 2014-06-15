@@ -1,4 +1,4 @@
-from judgingyou import card
+import judgingyou.card as card
 
 class Hand(object):
 

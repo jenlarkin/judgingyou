@@ -1,5 +1,5 @@
 from uuid import uuid1 as generateuuid
-from judgingyou import deck, gameDeck, gameRound, hand, card
+import judgingyou.deck as deck, judgingyou.gameDeck as gameDeck, judgingyou.gameRound as gameRound, judgingyou.hand as hand, judgingyou.card as card
 
 class Game(object):
 
